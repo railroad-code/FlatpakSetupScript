@@ -14,39 +14,40 @@ set -o pipefail
 
 
 apps=(
-    com.bitwarden.desktop
-    com.discordapp.Discord
-    com.github.marhkb.Pods
-    com.github.tchx84.Flatseal
-    com.github.wwmm.easyeffects
-    com.mattjakeman.ExtensionManager
-    com.protonvpn.www
-    com.ranfdev.DistroShelf
-    com.visualstudio.code
-    io.bassi.Amberol
-    io.github.giantpinkrobots.varia
-    io.gitlab.adhami3310.Converter
-    io.gitlab.theevilskeleton.Upscaler
-    it.mijorus.gearlever
-    md.obsidian.Obsidian
-    net.nokyan.Resources
-    net.pcsx2.PCSX2
-    org.DolphinEmu.dolphin-emu
-    org.gnome.Calculator
-    org.gnome.Decibels
-    org.gnome.Loupe
-    org.gnome.Papers
-    org.gnome.Showtime
-    org.gnome.Snapshot
-    org.gnome.TextEditor
-    org.gnome.World.PikaBackup
-    org.gnome.baobab
-    org.keepassxc.KeePassXC
-    org.libretro.RetroArch
-    org.mozilla.firefox
-    org.ppsspp.PPSSPP
-    org.qbittorrent.qBittorrent
-    page.tesk.Refine
+app.zen_browser.zen
+com.bitwarden.desktop
+com.discordapp.Discord
+com.github.marhkb.Pods
+com.github.tchx84.Flatseal
+com.github.wwmm.easyeffects
+com.mattjakeman.ExtensionManager
+com.protonvpn.www
+com.ranfdev.DistroShelf
+com.visualstudio.code
+io.bassi.Amberol
+io.github.flattool.Warehouse
+io.github.giantpinkrobots.varia
+io.gitlab.adhami3310.Converter
+io.gitlab.theevilskeleton.Upscaler
+it.mijorus.gearlever
+md.obsidian.Obsidian
+net.nokyan.Resources
+net.pcsx2.PCSX2
+org.DolphinEmu.dolphin-emu
+org.gnome.Calculator
+org.gnome.Decibels
+org.gnome.Loupe
+org.gnome.Papers
+org.gnome.Showtime
+org.gnome.Snapshot
+org.gnome.TextEditor
+org.gnome.World.PikaBackup
+org.gnome.baobab
+org.keepassxc.KeePassXC
+org.libretro.RetroArch
+org.ppsspp.PPSSPP
+org.qbittorrent.qBittorrent
+page.tesk.Refine
 )
 
 
