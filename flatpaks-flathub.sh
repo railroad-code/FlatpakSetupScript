@@ -7,45 +7,33 @@ set -o pipefail
 #set -o xtrace
 
 ################### MODIFICATION BELOW THIS LINE ###################
-# Use is command line to get the list of installed flatpaks
+# Use a text file passed as the first argument to get the list of Flatpaks.
+# Each line should contain a Flatpak application ID; blank lines and comments are ignored.
 # flatpak list --app --columns=application
 
-apps=(
-	app.zen_browser.zen
-	com.bitwarden.desktop
-	com.discordapp.Discord
-	com.github.marhkb.Pods
-	com.github.tchx84.Flatseal
-	com.github.wwmm.easyeffects
-	com.mattjakeman.ExtensionManager
-	com.protonvpn.www
-	com.ranfdev.DistroShelf
-	com.visualstudio.code
-	io.bassi.Amberol
-	io.github.flattool.Warehouse
-	io.github.giantpinkrobots.varia
-	io.gitlab.adhami3310.Converter
-	io.gitlab.theevilskeleton.Upscaler
-	it.mijorus.gearlever
-	md.obsidian.Obsidian
-	net.nokyan.Resources
-	net.pcsx2.PCSX2
-	org.DolphinEmu.dolphin-emu
-	org.gnome.Calculator
-	org.gnome.Decibels
-	org.gnome.Loupe
-	org.gnome.Papers
-	org.gnome.Showtime
-	org.gnome.Snapshot
-	org.gnome.TextEditor
-	org.gnome.World.PikaBackup
-	org.gnome.baobab
-	org.keepassxc.KeePassXC
-	org.libretro.RetroArch
-	org.ppsspp.PPSSPP
-	org.qbittorrent.qBittorrent
-	page.tesk.Refine
-)
+APPS=()
+
+function usage() {
+    echo "Usage: $0 <app-list-file>"
+    echo "  <app-list-file> should contain one Flatpak application ID per line."
+    exit 1
+}
+
+function load_apps_from_file() {
+    if [ $# -ne 1 ]; then
+        usage
+    fi
+
+    local file="$1"
+    if [ ! -f "$file" ] || [ ! -r "$file" ]; then
+        echo "Error: Cannot read app list file '$file'." >&2
+        exit 1
+    fi
+
+    mapfile -t apps < <(grep -E -v '^[[:space:]]*(#|$)' "$file")
+}
+
+load_apps_from_file "$1"
 
 ################### NO MODIFICATION BELOW THIS LINE ###################
 function confirm_root_execution() {
@@ -70,14 +58,14 @@ function require_flathub() {
 }
 
 function app_install() {
-	if [ ${#apps[@]} -eq 0 ]; then
+	if [ ${#APPS[@]} -eq 0 ]; then
 		echo "    No Flatpaks to install."
 		echo "Exiting..."
 		exit 1
 	fi
 
 	echo -e "\n==== Install Flatpaks ====="
-	for app in "${apps[@]}"; do
+	for app in "${APPS[@]}"; do
 		flatpak install -y flathub "$app"
 	done
 }
