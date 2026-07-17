@@ -6,20 +6,21 @@ set -o nounset
 set -o pipefail
 #set -o xtrace
 
-################### MODIFICATION BELOW THIS LINE ###################
+
 # Use a text file passed as the first argument to get the list of Flatpaks.
 # Each line should contain a Flatpak application ID; blank lines and comments are ignored.
 # flatpak list --app --columns=application
 
 APPS=()
 
-function usage() {
+
+usage() {
     echo "Usage: $0 <app-list-file>"
     echo "  <app-list-file> should contain one Flatpak application ID per line."
     exit 1
 }
 
-function load_apps_from_file() {
+load_apps_from_file() {
     if [ $# -ne 1 ]; then
         usage
     fi
@@ -30,13 +31,10 @@ function load_apps_from_file() {
         exit 1
     fi
 
-    mapfile -t apps < <(grep -E -v '^[[:space:]]*(#|$)' "$file")
+    mapfile -t APPS < <(grep -E -v '^[[:space:]]*(#|$)' "$file")
 }
 
-load_apps_from_file "$1"
-
-################### NO MODIFICATION BELOW THIS LINE ###################
-function confirm_root_execution() {
+confirm_root_execution() {
 	if [[ $EUID -eq 0 ]]; then
 		echo -e "\nYou are running this script as ROOT.\n"
 		read -r -p "Do you want to proceed with Flatpak installations? (y/n): " choice
@@ -50,14 +48,14 @@ function confirm_root_execution() {
 	fi
 }
 
-function require_flathub() {
+require_flathub() {
 	if ! flatpak remotes --columns=name | grep -q "^flathub$"; then
 		echo "Error: Flathub repository is not enabled."
 		exit 1
 	fi
 }
 
-function app_install() {
+app_install() {
 	if [ ${#APPS[@]} -eq 0 ]; then
 		echo "    No Flatpaks to install."
 		echo "Exiting..."
@@ -70,17 +68,22 @@ function app_install() {
 	done
 }
 
-function app_update() {
+app_update() {
 	echo -e "\n==== Update Flatpaks ====="
 	flatpak update -y
 }
 
-function app_clean() {
+app_clean() {
 	echo -e "\n==== Clean ====="
 	flatpak uninstall --unused -y
 }
 
-function main() {
+main() {
+	if [ $# -ne 1 ]; then
+		usage
+	fi
+
+	load_apps_from_file "$1"
 	confirm_root_execution
 	require_flathub
 	app_install
@@ -88,4 +91,4 @@ function main() {
 	app_clean
 }
 
-main
+main "$@"
